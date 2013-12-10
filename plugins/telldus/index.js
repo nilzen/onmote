@@ -27,25 +27,60 @@ var init = function(app) {
     res.json(devices);
 	});
 
-  app.get('/api/telldus/devices/:id', function(req, res) {
 
-      var message;
+  app.put('/api/telldus/devices/:id', function(req, res) {
 
-      if (isNaN(req.params.id)) {
-        message = 'Invalid id ' + req.params.id + '.';
-        log.error('[telldus]', message);
-        res.send(400, message);
+      var device = getDeviceById(req.params.id, res);
+
+      if (device === null) {
         return;
       }
 
-      var id = parseInt(req.params.id, 10);
+      var command = req.body.command;
+      var level = req.body.level;
 
-      var device = _.findWhere(telldus.getDevices(), { id: id });
+      if (command === 'off') {
+        if (_.contains(device.methods, 'TURNOFF')) {
+          telldus.turnOff(device.id);
+        } else {
+          badRequest('Unsupported command "off" for device with id "' + device.id + '".', res);
+        }
+      } else if (command === 'on') {
+        if (_.contains(device.methods, 'TURNON')) {
+          telldus.turnOn(device.id);
+        } else {
+          badRequest('Unsupported command "on" for device with id "' + device.id + '".', res);
+        }
+      } else if (command === 'dim') {
+        if (_.contains(device.methods, 'DIM')) {
 
-      if (_.isUndefined(device)) {
-        message = 'No device with id ' + id + ' found.';
-        log.error('[telldus]', message);
-        res.send(404, message);
+          if (isNaN(level)) {
+            badRequest('Invalid dim level "' + level + '".', res);
+          }
+
+          level = parseInt(level, 10);
+
+          if (level < 0 || level > 255) {
+            badRequest('Invalid dim level "' + level + '".', res);
+          }
+
+          telldus.dim(device.id, level);
+
+        } else {
+          badRequest('Unsupported command "on" for device with id "' + device.id + '".', res);
+        }
+      } else {
+        badRequest('Unknown command "' + command + '".', res);
+      }
+
+      res.send(200, 'Ok');
+  });
+
+  app.get('/api/telldus/devices/:id', function(req, res) {
+
+      var device = getDeviceById(req.params.id, res);
+
+      if (device === null) {
         return;
       }
 
@@ -53,6 +88,31 @@ var init = function(app) {
 
       res.json(device);
   });
+}
+
+var badRequest = function(message, res) {
+    log.error('[telldus]', message);
+    res.send(400, message);
+    return null;
+}
+
+var getDeviceById = function(id, res) {
+
+  var message;
+
+  if (isNaN(id)) {
+    badRequest('Invalid id "' + id + '".', res);
+  }
+
+  id = parseInt(id, 10);
+
+  var device = _.findWhere(telldus.getDevices(), { id: id });
+
+  if (_.isUndefined(device)) {
+    badRequest('No device with id "' + id + '" found.', res);
+  }
+
+  return device;
 }
 
 exports.name = name;
