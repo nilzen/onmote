@@ -5,13 +5,13 @@ var fs = require('fs'),
   config = require('./config');
   pluginRoot = './plugins';
 
-log.info('Scanning for plugins.');
+log.info('[app]', 'Scanning for plugins.');
 
 fs.readdirSync(pluginRoot).forEach(function(folder) {
 
   var pluginPath = pluginRoot + '/' + folder;
 
-  log.verbose('Scanning folder ' + pluginPath);
+  log.verbose('[app]', 'Scanning folder ' + pluginPath);
 
   var files = fs.readdirSync(pluginPath);
 
@@ -20,22 +20,22 @@ fs.readdirSync(pluginRoot).forEach(function(folder) {
     try {
       var plugin = require(pluginPath);
 
-      log.info('Initializing ' + plugin.name() + ' v' + plugin.version());
+      log.info('[app]', 'Initializing ' + plugin.name() + ' v' + plugin.version());
 
       plugin.init(app);
 
     } catch(e) {
-      log.error(e.stack);
+      log.error('[app]', e.stack);
     }
 
   } else {
-    log.error('Missing index.js in ' + pluginPath);
+    log.error('[app]', 'Missing index.js in ' + pluginPath);
   }
 });
 
 try {
   app.listen(config.port);
-  log.info('Server listening at port ' + config.port);
+  log.info('[app]', 'Server listening at port ' + config.port);
 } catch(e) {
-  log.error(e.stack);
+  log.error('[app]', e.stack);
 }

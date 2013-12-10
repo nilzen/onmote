@@ -10,13 +10,13 @@ var logger = new (winston.Logger)({
 
       new (winston.transports.File)({
       	'timestamp': true,
-      	'level': 'info',
+      	'level': 'verbose',
       	'maxsize': 10485760,
-      	'maxFiles': 10,
+      	'maxFiles': 1,
       	'json': false,
       	'filename': 'onmote.log'
       })
     ]
 });
 
-module.exports=logger;
+module.exports = logger;
