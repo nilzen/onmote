@@ -5,6 +5,9 @@ var fs = require('fs'),
   config = require('./config');
   pluginRoot = './plugins';
 
+app.use(express.bodyParser());
+app.disable('x-powered-by');
+
 log.info('[app]', 'Scanning for plugins.');
 
 fs.readdirSync(pluginRoot).forEach(function(folder) {
