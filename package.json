@@ -1,0 +1,13 @@
+{
+  "name": "onmote",
+  "version": "0.0.1",
+  "description": "onmote is a home automation app",
+  "private": true,
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nilzen/onmote/onmote.git"
+  },
+  "author": "Olov Nilzén",
+  "license": "MIT"
+}
