@@ -43,9 +43,10 @@ fs.readdirSync(pluginRoot).forEach(function(folder) {
     try {
       var plugin = require(pluginPath);
 
-      log.info('[app]', 'Initializing ' + plugin.name() + ' v' + plugin.version());
-
-      plugin.init(app, io.sockets);
+      log.info('[app]', 'Initializing ' + plugin.name + ' v' + plugin.version);
+      if (plugin.enabled) {
+        plugin.init(app, io.sockets);
+      }
 
     } catch(e) {
       log.error('[app]', e.stack);

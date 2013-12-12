@@ -3,14 +3,6 @@ var _ = require('underscore'),
   log = require('../../log'),
   telldus = require('telldus');
 
-var version = function() {
-	return '1.0.0';
-}
-
-var name = function() {
-	return 'Telldus';
-}
-
 var init = function(app, sockets) {
 
   sockets.on('telldus:getDevices',  function (socket) {
@@ -129,6 +121,7 @@ var getDeviceById = function(id, res) {
   return device;
 }
 
-exports.name = name;
-exports.version = version;
+exports.enabled = true;
+exports.name = 'Telldus';
+exports.version = '1.0.0';
 exports.init = init;
