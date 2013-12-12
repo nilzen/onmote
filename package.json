@@ -14,6 +14,7 @@
     "express": "~3.4.6",
     "winston": "~0.7.2",
     "telldus-core": "git://github.com/Hexagon/node-tellstick.git",
-    "underscore": "~1.5.2"
+    "underscore": "~1.5.2",
+    "socket.io": "~0.9.16"
   }
 }

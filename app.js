@@ -1,12 +1,32 @@
 var fs = require('fs'),
-  log = require('./log'),
+  http = require('http'),
   express = require('express'),
   app = express(),
+  server = http.createServer(app),
+  log = require('./log'),
+  io = require('socket.io'),
   config = require('./config');
   pluginRoot = './plugins';
 
-app.use(express.bodyParser());
+app.use(express.urlencoded());
+app.use(express.json());
 app.disable('x-powered-by');
+
+io = io.listen(server, {
+  logger: {
+    debug: log.debug, 
+    info: log.info, 
+    error: log.error, 
+    warn: log.warn
+  }
+});
+
+/*
+io.enable('browser client minification');
+io.enable('browser client etag');
+io.enable('browser client gzip');
+io.set('log level', 1); 
+*/
 
 log.info('[app]', 'Scanning for plugins.');
 
@@ -25,7 +45,7 @@ fs.readdirSync(pluginRoot).forEach(function(folder) {
 
       log.info('[app]', 'Initializing ' + plugin.name() + ' v' + plugin.version());
 
-      plugin.init(app);
+      plugin.init(app, io.sockets);
 
     } catch(e) {
       log.error('[app]', e.stack);
@@ -37,7 +57,7 @@ fs.readdirSync(pluginRoot).forEach(function(folder) {
 });
 
 try {
-  app.listen(config.port);
+  server.listen(config.port);
   log.info('[app]', 'Server listening at port ' + config.port);
 } catch(e) {
   log.error('[app]', e.stack);

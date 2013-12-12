@@ -1,4 +1,5 @@
 var _ = require('underscore'),
+  express = require('express'),
   log = require('../../log'),
   telldus = require('telldus');
 
@@ -10,7 +11,18 @@ var name = function() {
 	return 'Telldus';
 }
 
-var init = function(app) {
+var init = function(app, sockets) {
+
+  sockets.on('telldus:getDevices',  function (socket) {
+    console.log('telldus:getDevices');
+    socket.emit('telldus:devices', telldus.getDevices());
+  });
+
+  sockets.on('connection', function (socket) {
+    socket.emit('telldus:devices', telldus.getDevices());
+  });
+
+  app.use('/telldus', express.static(__dirname + '/public'));
 
   app.all('/api/telldus/*', function(req, res, next) {
     log.verbose('[telldus]', req.originalUrl);
@@ -73,7 +85,7 @@ var init = function(app) {
         badRequest('Unknown command "' + command + '".', res);
       }
 
-      res.send(200, 'Ok');
+      res.json({ status: 'ok' });
   });
 
   app.get('/api/telldus/devices/:id', function(req, res) {
@@ -92,7 +104,7 @@ var init = function(app) {
 
 var badRequest = function(message, res) {
     log.error('[telldus]', message);
-    res.send(400, message);
+    res.json(400, { error: message });
     return null;
 }
 
@@ -102,6 +114,7 @@ var getDeviceById = function(id, res) {
 
   if (isNaN(id)) {
     badRequest('Invalid id "' + id + '".', res);
+    return null;
   }
 
   id = parseInt(id, 10);
@@ -110,6 +123,7 @@ var getDeviceById = function(id, res) {
 
   if (_.isUndefined(device)) {
     badRequest('No device with id "' + id + '" found.', res);
+    return null;
   }
 
   return device;
