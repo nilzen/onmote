@@ -5,13 +5,12 @@ var _ = require('underscore'),
 
 var init = function(app, sockets) {
 
-  sockets.on('telldus:getDevices',  function (socket) {
-    console.log('telldus:getDevices');
-    socket.emit('telldus:devices', telldus.getDevices());
-  });
-
   sockets.on('connection', function (socket) {
-    socket.emit('telldus:devices', telldus.getDevices());
+    socket.emit('telldus:devices', { from: 'connection', devices: telldus.getDevicesSync() });
+
+    socket.on('telldus:getDevices',  function (data) {
+      socket.emit('telldus:devices', { from: 'telldus:getDevices', devices: telldus.getDevicesSync() });
+    });
   });
 
   app.use('/telldus', express.static(__dirname + '/public'));
@@ -24,7 +23,7 @@ var init = function(app, sockets) {
 	
 	app.get('/api/telldus/devices', function(req, res) {
 
-    var devices = telldus.getDevices();
+    var devices = telldus.getDevicesSync();
 
     log.verbose('[telldus]', JSON.stringify(devices));
 
@@ -111,7 +110,7 @@ var getDeviceById = function(id, res) {
 
   id = parseInt(id, 10);
 
-  var device = _.findWhere(telldus.getDevices(), { id: id });
+  var device = _.findWhere(telldus.getDevicesSync(), { id: id });
 
   if (_.isUndefined(device)) {
     badRequest('No device with id "' + id + '" found.', res);

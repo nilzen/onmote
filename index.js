@@ -21,6 +21,8 @@ io = io.listen(server, {
   }
 });
 
+app.use('/', express.static(__dirname + '/public'));
+
 /*
 io.enable('browser client minification');
 io.enable('browser client etag');
