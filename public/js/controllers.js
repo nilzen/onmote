@@ -34,7 +34,7 @@ angular.module('onmote')
 				command: 'dim',
 				value: that.device.status.level
 			});
-		}, 500);
+		}, 100);
   	
     };
 
