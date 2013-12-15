@@ -14,12 +14,34 @@
       console.log(data);
     });
 
+    socket.on('telldus:device', function(data) {
+      console.log(data);
+    });
+
     function getDevices() {
       socket.emit('telldus:getDevices');
     }
 
+    function getDevice(id) {
+      socket.emit('telldus:getDevice', { id: id });
+    }
+
+    function sendCommand(id, command, value) {
+      socket.emit('telldus:sendCommand', {
+        id: id, 
+        command: command, 
+        value: value
+      });
+    }
+
   </script>
-  <a href="javascript:getDevices();">Emit!</a>
+  <ul>
+    <li><a href="javascript:getDevices();">getDevices();</a></li>
+    <li><a href="javascript:getDevice();">getDevice();</a></li>
+    <li><a href="javascript:getDevice(1);">getDevice(1);</a></li>
+    <li><a href="javascript:getDevice(2);">getDevice(2);</a></li>
+    <li><a href="javascript:sendCommand(2, 'on');">sendCommand(2, 'on');</a></li>
+  </ul>
 
 </body>
 </html>
