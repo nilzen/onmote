@@ -57,8 +57,8 @@ var sendCommand = function(id, command, value, cb) {
     if (command === 'off') {
 
       if (_.contains(device.methods, 'TURNOFF')) {
-        telldus.turnOff(id, function() {
-          cb({ status: 'ok' });
+        telldus.turnOff(id, function(response) {
+          validateResponse(response, cb);
         });
       } else {
         cb({ error: 'Unsupported command "off" for device with id "' + id + '".' });
@@ -67,8 +67,8 @@ var sendCommand = function(id, command, value, cb) {
     // on
     } else if (command === 'on') {
       if (_.contains(device.methods, 'TURNON')) {
-        telldus.turnOn(id, function() {
-          cb({ status: 'ok' });
+        telldus.turnOn(id, function(response) {
+          validateResponse(response, cb);
         });
       } else {
         cb({ error: 'Unsupported command "on" for device with id "' + id + '".' });
@@ -89,8 +89,8 @@ var sendCommand = function(id, command, value, cb) {
           cb({ error: 'Invalid dim level "' + level + '".' });
         }
 
-        telldus.dim(device.id, level, function() {
-          cb({ status: 'ok' });
+        telldus.dim(device.id, level, function(response) {
+          validateResponse(response, cb);
         });
 
       } else {
@@ -102,6 +102,14 @@ var sendCommand = function(id, command, value, cb) {
       cb({ error: 'Unknown command "' + command + '".' });
     }
   });
+}
+
+var validateResponse = function(response, cb) {
+  if (response !== 0) {
+    cb({ error: response });
+  } else {
+    cb({ status: 'ok' });
+  }
 }
 
 var getDevices = function(cb) {
