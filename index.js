@@ -36,6 +36,10 @@ fs.readdirSync(pluginRoot).forEach(function(folder) {
 
   var pluginPath = pluginRoot + '/' + folder;
 
+  if (!fs.statSync(pluginPath).isDirectory()) {
+    return;
+  }
+
   log.verbose('[app]', 'Scanning folder ' + pluginPath);
 
   var files = fs.readdirSync(pluginPath);
