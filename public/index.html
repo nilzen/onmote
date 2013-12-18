@@ -9,11 +9,7 @@
 
     <ul>
       <li ng-repeat="device in devices">
-        <label for="device-{{device.id}}">{{device.name}}</h2>
-
-        <input id="device-{{device.id}}" type="checkbox" ng-click="toggle($event, device.id)" ng-if="device.methods.indexOf('DIM') === -1" ng-checked="device.status.status === 'ON'" />
-
-        <input id="device-{{device.id}}" type="range" min="0" max="255" ng-change="dim()" ng-model="device.status.level" ng-if="device.methods.indexOf('DIM') > -1" ng-value="device.status.level" />
+        <telldus-device></telldus-device>
       </li>
     </ul>
 
