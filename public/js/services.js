@@ -36,4 +36,7 @@ angular.module('onmote.services', [])
         });
       }
     };
+  })
+  .factory('_', function() {
+    return window._;
   });

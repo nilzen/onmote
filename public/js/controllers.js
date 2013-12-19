@@ -1,8 +1,7 @@
 angular.module('onmote.controllers', [])
-  .controller('DeviceListCtrl', function ($scope, $timeout, $log, socket) {
+  .controller('DeviceListCtrl', function ($scope, $timeout, $log, socket, _) {
 
-    var dimTimer,
-      debugStart;
+    var debugStart;
 
     socket.on('telldus:*',function(event, data) {
       $log.debug(event, data);
@@ -30,21 +29,18 @@ angular.module('onmote.controllers', [])
       });
     };
 
-    $scope.dim = function() {
+    $scope.dim = _.throttle(function() {
 
       var that = this;
-
-      $timeout.cancel(dimTimer);
 
       $log.debug('telldus:sendCommand', 'start');
       debugStart = new Date().getTime();
 
-      dimTimer = $timeout(function() {
-        socket.emit('telldus:sendCommand', {
-          id: that.device.id,
-          command: 'dim',
-          value: that.device.status.level
-        });
-      }, 100);
-    };
+      socket.emit('telldus:sendCommand', {
+        id: that.device.id,
+        command: 'dim',
+        value: that.device.status.level
+      });
+    }, 500, { leading: false });
+
   });

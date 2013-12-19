@@ -1,4 +1,4 @@
-  {
+{
   "name": "onmote",
   "version": "0.1",
   "main": "index.html",
@@ -7,8 +7,7 @@
     "libs"
   ],
   "dependencies": {
-    "angular": "latest",
-    "requirejs": "latest",
-    "requirejs-domready": "latest"
+    "underscore": "~1.5.2",
+    "angular": "~1.2.5"
   }
 }

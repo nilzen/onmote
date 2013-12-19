@@ -16,5 +16,11 @@
     "underscore": "~1.5.2",
     "socket.io": "~0.9.16",
     "telldus": "0.0.5"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-uglify": "~0.2.7",
+    "grunt-contrib-jshint": "~0.7.2",
+    "grunt-contrib-copy": "~0.4.1"
   }
 }
