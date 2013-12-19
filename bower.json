@@ -1,0 +1,14 @@
+  {
+  "name": "onmote",
+  "version": "0.1",
+  "main": "index.html",
+  "ignore": [
+    "**/.*",
+    "libs"
+  ],
+  "dependencies": {
+    "angular": "latest",
+    "requirejs": "latest",
+    "requirejs-domready": "latest"
+  }
+}

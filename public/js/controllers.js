@@ -1,4 +1,4 @@
-angular.module('onmote')
+angular.module('onmote.controllers', [])
   .controller('DeviceListCtrl', function ($scope, $timeout, $log, socket) {
 
     var dimTimer,
@@ -8,8 +8,8 @@ angular.module('onmote')
       $log.debug(event, data);
     });
 
-    socket.on('telldus:command',function(data) {
-      $log.debug('telldus:sendCommand', 'end', ((new Date().getTime() - debugStart) / 1000) + "s");
+    socket.on('telldus:command',function() {
+      $log.debug('telldus:sendCommand', 'end', ((new Date().getTime() - debugStart) / 1000) + 's');
     });
 
     socket.on('telldus:devices', function(data) {
@@ -18,7 +18,7 @@ angular.module('onmote')
 
     $scope.toggle = function($event, id) {
 
-    var checkbox = $event.target;
+      var checkbox = $event.target;
       var command = (checkbox.checked ? 'on' : 'off');
 
       $log.debug('telldus:sendCommand', 'start');
@@ -30,7 +30,7 @@ angular.module('onmote')
       });
     };
 
-    $scope.dim = function($event, id) {
+    $scope.dim = function() {
 
       var that = this;
 
@@ -46,11 +46,5 @@ angular.module('onmote')
           value: that.device.status.level
         });
       }, 100);
-    };
-  }).directive('telldusDevice', function() {
-    return {
-      restrict: "E",
-      replace: true,
-      templateUrl: 'telldus/directives/device.html',
     };
   });

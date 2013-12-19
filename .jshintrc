@@ -1,0 +1,16 @@
+{
+  "undef": true,
+  "unused": true,
+  "node": true,
+  "eqeqeq": true,
+  "laxcomma": true,
+  "indent": 2,
+  "latedef": "nofunc",
+  "quotmark": true,
+  "trailing": true,
+  "curly": true,
+  "globals": {
+    "angular": true,
+    "io": true
+  }
+}

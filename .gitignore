@@ -1,5 +1,17 @@
-_inspiration/
+# Mac specific
 .DS_Store
+
+# Inspiration files
+_inspiration/
+
+# Node modules
 node_modules/
+
+# Bower components
+bower_components/
+
+# Log files
 onmote.log
+
+# Sublime project files
 onmote.sublime*
