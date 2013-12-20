@@ -5,7 +5,7 @@ var fs = require('fs'),
   server = http.createServer(app),
   log = require('./log'),
   io = require('socket.io'),
-  config = require('./config');
+  config = require('./config'),
   pluginRoot = './plugins';
 
 app.use(express.urlencoded());
@@ -14,9 +14,9 @@ app.disable('x-powered-by');
 
 io = io.listen(server, {
   logger: {
-    debug: log.debug, 
-    info: log.info, 
-    error: log.error, 
+    debug: log.debug,
+    info: log.info,
+    error: log.error,
     warn: log.warn
   }
 });
