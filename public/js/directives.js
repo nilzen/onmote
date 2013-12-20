@@ -1,5 +1,5 @@
 angular.module('onmote.directives', [])
-  .directive('telldusDevice', function() {
+  .directive('onmTelldusDevice', function() {
     return {
       restrict: 'E',
       replace: true,
