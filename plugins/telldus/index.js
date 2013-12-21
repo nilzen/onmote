@@ -2,12 +2,11 @@ var _ = require('underscore'),
   express = require('express'),
   log = require('../../log'),
   telldus = require('telldus'),
-  devices;
+  cachedDevices;
 
 var getDevices = function(cb) {
   
-  /*
-  if (devices == null) {
+  if (cachedDevices == null) {
 
     log.verbose('[telldus]', 'No devices in cache, get from telldus core.');
 
@@ -16,15 +15,25 @@ var getDevices = function(cb) {
       devices = null;
     }, 10000);
 
-    devices = telldus.getDevicesSync();
+    telldus.getDevices(function(devices) {
+
+      for (var i = devices.length - 1; i >= 0; i--) {
+        if (devices[i].methods.indexOf('DIM') > -1) {
+          devices[i].renderer = 'dimmer';
+        } else {
+          devices[i].renderer = 'switch';
+        }
+      };
+
+      cachedDevices = devices;
+
+      cb(cachedDevices);
+    });
   } else {
     log.verbose('[telldus]', 'Devices in cache.');
+    
+    cb(cachedDevices);
   }
-  */
-
-  devices = telldus.getDevicesSync();
-
-  cb(devices);
 };
 
 var getDeviceById = function(id, cb) {
@@ -33,15 +42,18 @@ var getDeviceById = function(id, cb) {
     cb({ error: 'Invalid id "' + id + '".' });
   } else {
 
-    id = parseInt(id, 10);
+    getDevices(function(devices) {
 
-    var device = _.findWhere(devices, { id: id });
+      id = parseInt(id, 10);
 
-    if (_.isUndefined(device)) {
-      cb({ error: 'No device with id "' + id + '" found.' });
-    } else {
-      cb(device);
-    }
+      var device = _.findWhere(devices, { id: id });
+
+      if (_.isUndefined(device)) {
+        cb({ error: 'No device with id "' + id + '" found.' });
+      } else {
+        cb(device);
+      }
+    })
   }
 };
 
