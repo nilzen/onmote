@@ -16,28 +16,33 @@ angular.module('onmote.controllers', [])
     });
 
     $scope.toggle = function() {
+      $scope.sendCommand(this.device.id, this.device.status.name.toLowerCase());
+    };
 
-      $log.debug('telldus:sendCommand', 'start');
-      debugStart = new Date().getTime();
+    $scope.on = function() {
+      $scope.sendCommand(this.device.id, 'on');
+    };
 
-      socket.emit('telldus:sendCommand', {
-        id: this.device.id,
-        command: this.device.status.name.toLowerCase()
-      });
-    }
+    $scope.off = function() {
+      $scope.sendCommand(this.device.id, 'off');
+    };
 
     $scope.dim = _.throttle(function() {
+      $scope.sendCommand(this.device.id, 'dim', this.device.status.level);
+    }, 500, { leading: false });
 
-      var that = this;
+    $scope.sendCommand = function(id, command, value) {
 
       $log.debug('telldus:sendCommand', 'start');
+      $log.debug('telldus:sendCommand', 'id:', id, 'command:', command, 'value:', value);
+
       debugStart = new Date().getTime();
 
       socket.emit('telldus:sendCommand', {
-        id: that.device.id,
-        command: 'dim',
-        value: that.device.status.level
+        id: id,
+        command: command,
+        value: value
       });
-    }, 500, { leading: false });
+    };
 
   });
