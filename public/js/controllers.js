@@ -15,19 +15,16 @@ angular.module('onmote.controllers', [])
       $scope.devices = data;
     });
 
-    $scope.toggle = function($event, id) {
-
-      var checkbox = $event.target;
-      var command = (checkbox.checked ? 'on' : 'off');
+    $scope.toggle = function() {
 
       $log.debug('telldus:sendCommand', 'start');
       debugStart = new Date().getTime();
 
       socket.emit('telldus:sendCommand', {
-        id: id,
-        command: command
+        id: this.device.id,
+        command: this.device.status.name.toLowerCase()
       });
-    };
+    }
 
     $scope.dim = _.throttle(function() {
 
