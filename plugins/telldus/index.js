@@ -1,39 +1,24 @@
 var _ = require('underscore'),
   express = require('express'),
   log = require('../../log'),
-  telldus = require('telldus'),
-  cachedDevices;
+  telldus = require('telldus');
 
 var getDevices = function(cb) {
-  
-  if (cachedDevices == null) {
 
-    log.verbose('[telldus]', 'No devices in cache, get from telldus core.');
+  telldus.getDevices(function(devices) {
 
-    setTimeout(function() {
-      log.verbose('[telldus]', 'Clear devices cache.');
-      devices = null;
-    }, 10000);
+    for (var i = devices.length - 1; i >= 0; i--) {
+      if (devices[i].methods.indexOf('DIM') > -1) {
+        devices[i].renderer = 'dimmer';
+      } else {
+        devices[i].renderer = 'switch';
+      }
+    };
 
-    telldus.getDevices(function(devices) {
+    cachedDevices = devices;
 
-      for (var i = devices.length - 1; i >= 0; i--) {
-        if (devices[i].methods.indexOf('DIM') > -1) {
-          devices[i].renderer = 'dimmer';
-        } else {
-          devices[i].renderer = 'switch';
-        }
-      };
-
-      cachedDevices = devices;
-
-      cb(cachedDevices);
-    });
-  } else {
-    log.verbose('[telldus]', 'Devices in cache.');
-    
     cb(cachedDevices);
-  }
+  });
 };
 
 var getDeviceById = function(id, cb) {
@@ -58,7 +43,7 @@ var getDeviceById = function(id, cb) {
 };
 
 var validateResponse = function(response, cb) {
-  if (response !== 0) {
+  if (response !== null) {
     cb({ error: response });
   } else {
     cb({ status: 'ok' });
