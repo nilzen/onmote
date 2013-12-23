@@ -5,7 +5,7 @@ var _ = require('underscore'),
 
 var getDevices = function(cb) {
 
-  telldus.getDevices(function(devices) {
+  telldus.getDevices(function(err, devices) {
 
     for (var i = devices.length - 1; i >= 0; i--) {
       if (devices[i].methods.indexOf('DIM') > -1) {
