@@ -13,11 +13,9 @@ var getDevices = function(cb) {
       } else {
         devices[i].renderer = 'switch';
       }
-    };
+    }
 
-    cachedDevices = devices;
-
-    cb(cachedDevices);
+    cb(devices);
   });
 };
 
@@ -34,22 +32,21 @@ var getDeviceById = function(id, cb) {
       var device = _.findWhere(devices, { id: id });
 
       if (_.isUndefined(device)) {
-        cb({ error: 'No device with id "' + id + '" found.' });
+        cb({ error: { message:  'No device with id "' + id + '" found.' } });
       } else {
         cb(device);
       }
-    })
+    });
   }
 };
 
-var validateResponse = function(response, cb) {
-  if (response !== null) {
-    cb({ error: response });
+var validateResponse = function(error, cb) {
+  if (error) {
+    cb({ status: 'error', error: error });
   } else {
     cb({ status: 'ok' });
   }
-};
-
+}
 var sendCommand = function(id, command, value, cb) {
 
   getDeviceById(id, function(device) {
@@ -62,50 +59,29 @@ var sendCommand = function(id, command, value, cb) {
     // off
     if (command === 'off') {
 
-      if (_.contains(device.methods, 'TURNOFF')) {
-        telldus.turnOff(id, function(response) {
-          validateResponse(response, cb);
-        });
-      } else {
-        cb({ error: 'Unsupported command "off" for device with id "' + id + '".' });
-      }
+      telldus.turnOff(id, function(error) {
+        validateResponse(error, cb);
+      });
 
     // on
     } else if (command === 'on') {
-      if (_.contains(device.methods, 'TURNON')) {
-        telldus.turnOn(id, function(response) {
-          validateResponse(response, cb);
-        });
-      } else {
-        cb({ error: 'Unsupported command "on" for device with id "' + id + '".' });
-      }
+
+      telldus.turnOn(id, function(error) {
+        validateResponse(error, cb);
+      });
 
     // dim
     } else if (command === 'dim') {
 
-      if (_.contains(device.methods, 'DIM')) {
+      var level = parseInt(value, 10);
 
-        if (isNaN(value)) {
-          cb({ error: 'Invalid dim value "' + value + '".' });
-        }
-
-        var level = parseInt(value, 10);
-
-        if (level < 0 || level > 255) {
-          cb({ error: 'Invalid dim level "' + level + '".' });
-        }
-
-        telldus.dim(device.id, level, function(response) {
-          validateResponse(response, cb);
-        });
-
-      } else {
-        cb({ error: 'Unsupported command "dim" for device with id "' + id + '".' });
-      }
+      telldus.dim(device.id, level, function(error) {
+        validateResponse(error, cb);
+      });
 
     // unknown command
     } else {
-      cb({ error: 'Unknown command "' + command + '".' });
+      cb({ error: { message: 'Unknown command "' + command } });
     }
   });
 };
