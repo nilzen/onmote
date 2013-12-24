@@ -1,17 +1,33 @@
 angular.module('onmote.controllers', [])
-  .controller('DeviceListCtrl', function ($scope, $timeout, $log, socket, _) {
+  .controller('MainCtrl', function ($scope, notificationService) {
+
+    $scope.notifications = notificationService.notifications;
+
+    $scope.$watch('notificationService.current', function (notifications) {
+      if (notifications) {
+        $scope.notifications = notifications;
+      }
+    });
+  })
+  .controller('DeviceListCtrl', function ($scope, $timeout, $log, _, socketService, notificationService) {
 
     var debugStart;
 
-    socket.on('telldus:*',function(event, data) {
+    socketService.on('telldus:*',function(event, data) {
       $log.debug(event, data);
     });
 
-    socket.on('telldus:command',function() {
+    socketService.on('telldus:command', function(response) {
+      if (response.error) {
+        notificationService.error(response.error.message);
+      } else {
+        notificationService.success('ok');
+      }
+
       $log.debug('telldus:sendCommand', 'end', ((new Date().getTime() - debugStart) / 1000) + 's');
     });
 
-    socket.on('telldus:devices', function(data) {
+    socketService.on('telldus:devices', function(data) {
       $scope.devices = data;
     });
 
@@ -34,11 +50,11 @@ angular.module('onmote.controllers', [])
     $scope.sendCommand = function(id, command, value) {
 
       $log.debug('telldus:sendCommand', 'start');
-      $log.debug('telldus:sendCommand', 'id:', id, 'command:', command, 'value:', value);
+      $log.debug('telldus:sendCommand', 'id:', id + ',', 'command:', command + ',', 'value:', value);
 
       debugStart = new Date().getTime();
 
-      socket.emit('telldus:sendCommand', {
+      socketService.emit('telldus:sendCommand', {
         id: id,
         command: command,
         value: value

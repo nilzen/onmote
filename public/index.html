@@ -3,7 +3,7 @@
 <head>
 	<title>onmote</title>
 </head>
-<body>
+<body ng-controller="MainCtrl">
 
   <div ng-controller="DeviceListCtrl">
 
@@ -15,6 +15,7 @@
 
   </div>
 
+  <onm-notifications></onm-notifications>
   
   <script src="/socket.io/socket.io.js"></script>
   <script src="/js/libs/angular.min.js"></script>
