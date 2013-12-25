@@ -9,12 +9,23 @@ angular.module('onmote.controllers', [])
       }
     });
   })
-  .controller('StatusCtrl', function () {
+  .controller('StatusCtrl', function ($scope, socketService) {
+
+    $scope.loaded = false;
+
+    socketService.emit('status:getStatus');
+
+    socketService.on('status:status', function(status) {
+      $scope.status = status;
+      $scope.loaded = true;
+    });
     
   })
   .controller('TelldusDeviceListCtrl', function ($scope, $timeout, $log, _, socketService, notificationService) {
 
     var debugStart;
+
+    $scope.loaded = false;
 
     socketService.emit('telldus:getDevices');
 
@@ -33,6 +44,7 @@ angular.module('onmote.controllers', [])
     });
 
     socketService.on('telldus:devices', function(data) {
+      $scope.loaded = true;
       $scope.devices = data;
     });
 

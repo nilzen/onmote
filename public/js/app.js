@@ -5,6 +5,7 @@ var app = angular.module('onmote', [
   'ngRoute',
   'onmote.services',
   'onmote.directives',
+  'onmote.filters',
   'onmote.controllers'
 ]).config([
   '$provide', function($provide) {

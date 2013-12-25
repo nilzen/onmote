@@ -1,1 +1,25 @@
-<h1>Status</h1>
+<div ng-show="loaded">
+  <h1>Status</h1>
+
+  <h2>Process</h1>
+  <p><strong>uptime:</strong> {{status.process.uptime | timespan}}</p>
+  <p><strong>argv:</strong> {{status.process.argv}}</p>
+  <p><strong>execPath:</strong> {{status.process.execPath}}</p>
+  <p><strong>execArgv:</strong> {{status.process.execArgv}}</p>
+  <p><strong>version:</strong> {{status.process.version}}</p>
+  <p><strong>versions:</strong> {{status.process.versions}}</p>
+  <p><strong>config:</strong> {{status.process.config}}</p>
+  <p><strong>title:</strong> {{status.process.title}}</p>
+
+  <h2>OS</h1>
+  <p><strong>uptime:</strong> {{status.os.uptime | timespan}}</p>
+  <p><strong>hostname:</strong> {{status.os.hostname}}</p>
+  <p><strong>type:</strong> {{status.os.type}}</p>
+  <p><strong>platform:</strong> {{status.os.platform}}</p>
+  <p><strong>arch:</strong> {{status.os.arch}}</p>
+  <p><strong>loadavg:</strong> {{status.os.loadavg}}</p>
+  <p><strong>totalmem:</strong> {{status.os.totalmem}}</p>
+  <p><strong>freemem:</strong> {{status.os.freemem}}</p>
+  <p><strong>cpus:</strong> {{status.os.cpus}}</p>
+  <p><strong>networkInterfaces:</strong> {{status.os.networkInterfaces}}</p>
+</div>
