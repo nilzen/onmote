@@ -25,8 +25,9 @@ var app = angular.module('onmote', [
     ]);
   }
 ])
-.config(function ($routeProvider) {
+.config(function ($routeProvider, $locationProvider) {
 
-  $routeProvider.when('/telldus', { templateUrl: 'telldus/index.html', controller: 'TelldusDeviceListCtrl' });
+  $routeProvider.when('/status', { templateUrl: 'plugin/status/index.html', controller: 'StatusCtrl' });
+  $routeProvider.when('/telldus', { templateUrl: 'plugin/telldus/index.html', controller: 'TelldusDeviceListCtrl' });
   $routeProvider.otherwise({redirectTo: '/telldus'});
 });

@@ -90,11 +90,6 @@ var init = function(app, sockets) {
 
   sockets.on('connection', function (socket) {
 
-    getDevices(function(response) {
-      log.verbose('[telldus]', 'telldus:devices', JSON.stringify(response));
-      socket.emit('telldus:devices', response);
-    });
-
     socket.on('telldus:getDevices', function () {
       getDevices(function(response) {
         log.verbose('[telldus]', 'telldus:devices', JSON.stringify(response));
@@ -123,7 +118,7 @@ var init = function(app, sockets) {
 
   });
 
-  app.use('/telldus', express.static(__dirname + '/public'));
+  app.use('/plugin/telldus', express.static(__dirname + '/public'));
 };
 
 exports.enabled = true;

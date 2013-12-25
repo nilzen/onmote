@@ -3,7 +3,7 @@ angular.module('onmote.directives', [])
     return {
       restrict: 'E',
       replace: true,
-      templateUrl: 'telldus/directives/device.html',
+      templateUrl: 'plugin/telldus/directives/device.html',
     };
   })
   .directive('onmNotifications', function() {

@@ -26,6 +26,27 @@ angular.module('onmote.services', [])
         });
       },
 
+      removeListener: function (eventName) {
+
+        // remove all "namespaced" listeners
+        if (eventName.indexOf(':*') !== -1) {
+
+          var namespace = eventName.split(':*')[0] + ':';
+
+          for (event in socket.$events) {
+            if (event.indexOf(namespace) == 0) {
+              socket.removeListener(event, socket.$events[event]);
+            }
+          }
+
+        // re
+        } else {
+          if (socket.$events[eventName]) {
+            socket.removeListener(eventName, socket.$events[eventName]);
+          }
+        }
+      },
+
       emit: function (eventName, data, callback) {
         socket.emit(eventName, data, function () {
           var args = arguments;
