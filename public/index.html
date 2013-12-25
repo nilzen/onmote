@@ -5,20 +5,13 @@
 </head>
 <body ng-controller="MainCtrl">
 
-  <div ng-controller="DeviceListCtrl">
-
-    <ul>
-      <li ng-repeat="device in devices">
-        <onm-telldus-device></onm-telldus-device>
-      </li>
-    </ul>
-
-  </div>
+  <div ng-view></div>
 
   <onm-notifications></onm-notifications>
   
   <script src="/socket.io/socket.io.js"></script>
   <script src="/js/libs/angular.min.js"></script>
+  <script src="/js/libs/angular-route.min.js"></script>
   <script src="/js/libs/underscore-min.js"></script>
   <script src="/js/app.js"></script>
   <script src="/js/services.js"></script>

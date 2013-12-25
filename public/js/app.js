@@ -1,6 +1,8 @@
+/* exported app */
 'use strict';
 
-angular.module('onmote', [
+var app = angular.module('onmote', [
+  'ngRoute',
   'onmote.services',
   'onmote.directives',
   'onmote.controllers'
@@ -10,7 +12,7 @@ angular.module('onmote', [
       '$delegate', function($delegate) {
         $delegate.safeApply = function(fn) {
           var phase = $delegate.$$phase;
-          if (phase === "$apply" || phase === "$digest") {
+          if (phase === '$apply' || phase === '$digest') {
             if (fn && typeof fn === 'function') {
               fn();
             }
@@ -22,4 +24,9 @@ angular.module('onmote', [
       }
     ]);
   }
-]);;
+])
+.config(function ($routeProvider) {
+
+  $routeProvider.when('/telldus', { templateUrl: 'telldus/index.html', controller: 'TelldusDeviceListCtrl' });
+  $routeProvider.otherwise({redirectTo: '/telldus'});
+});

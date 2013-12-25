@@ -9,7 +9,7 @@ angular.module('onmote.controllers', [])
       }
     });
   })
-  .controller('DeviceListCtrl', function ($scope, $timeout, $log, _, socketService, notificationService) {
+  .controller('TelldusDeviceListCtrl', function ($scope, $timeout, $log, _, socketService, notificationService) {
 
     var debugStart;
 

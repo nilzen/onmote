@@ -1,7 +1,5 @@
-<div ng-cloak>
-    <ul>
-        <li ng-repeat="notification in notifications" class="notification-{{notification.type}}">
-			{{notification.message}}
-        </li>
-    </ul>
-</div>
+<ul class="notifications" ng-cloak>
+  <li ng-repeat="notification in notifications" class="notification-{{notification.type}}">
+    {{notification.message}}
+  </li>
+</ul>
