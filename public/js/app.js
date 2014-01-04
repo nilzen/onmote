@@ -36,29 +36,30 @@ var app = angular.module('onmote', [
     ]);
   }
 ])
+.config(function($controllerProvider, $compileProvider, $filterProvider, $provide){
+  app.register = {
+    controller: $controllerProvider.register,
+    directive: $compileProvider.directive,
+    filter: $filterProvider.register,
+    factory: $provide.factory,
+    service: $provide.service
+  };
+})
 .config(function ($routeProvider) {
 
-  $routeProvider.when('/status', { templateUrl: 'plugin/status/index.html', controller: 'StatusCtrl' });
-  $routeProvider.when('/telldus', { templateUrl: 'plugin/telldus/index.html', controller: 'TelldusDeviceListCtrl' });
-
-  $routeProvider.when('/:plugin', {
+  $routeProvider.when('/plugin/:plugin', {
 
     templateUrl: function(rd) {
       return 'plugin/' + rd.plugin + '/index.html';
     },
-    controller: function($route) {
 
-      var plugin = $route.current.params.plugin;
-
-      return plugin.charAt(0).toUpperCase() + plugin.slice(1) + 'Ctrl';
-    },
     resolve: {
       load: function($q, $route, $rootScope) {
 
         var deferred = $q.defer();
 
         var dependencies = [
-          'plugin/' + $route.current.params.plugin + '/controller.js'
+          'plugin/' + $route.current.params.plugin + '/index.js'
         ];
 
         $script(dependencies, function () {
@@ -71,6 +72,4 @@ var app = angular.module('onmote', [
       }
     }
   });
-
-  $routeProvider.otherwise({redirectTo: '/telldus'});
 });

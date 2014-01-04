@@ -13,6 +13,7 @@
     "window": true,
     "angular": true,
     "io": true,
-    "$script": true
+    "$script": true,
+    "app": true
   }
 }
