@@ -6,7 +6,8 @@ var fs = require('fs'),
   log = require('./log'),
   io = require('socket.io'),
   config = require('./config'),
-  pluginRoot = './plugins';
+  pluginRoot = './plugins',
+  navigation = [];
 
 app.use(express.urlencoded());
 app.use(express.json());
@@ -52,6 +53,10 @@ fs.readdirSync(pluginRoot).forEach(function(folder) {
       log.info('[app]', 'Initializing ' + plugin.name + ' v' + plugin.version);
       if (plugin.enabled) {
         plugin.init(app, io.sockets);
+
+        if (plugin.navigation) {
+          navigation.push(plugin.navigation);
+        }
       }
 
     } catch(e) {
@@ -61,6 +66,14 @@ fs.readdirSync(pluginRoot).forEach(function(folder) {
   } else {
     log.error('[app]', 'Missing index.js in ' + pluginPath);
   }
+});
+
+io.sockets.on('connection', function (socket) {
+
+  socket.on('core:getNavigation', function () {
+    log.verbose('[core]', 'core:navigation', JSON.stringify(navigation));
+    socket.emit('core:navigation', navigation);
+  });
 });
 
 try {
