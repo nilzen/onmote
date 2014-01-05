@@ -47,7 +47,7 @@ var app = angular.module('onmote', [
 })
 .config(function ($routeProvider) {
 
-  $routeProvider.when('/plugin/:plugin', {
+  $routeProvider.when('/p/:plugin', {
 
     templateUrl: function(rd) {
       return 'plugin/' + rd.plugin + '/index.html';
