@@ -40,6 +40,12 @@ var init = function (app, sockets) {
 };
 
 exports.enabled = true;
+
+exports.navigation = {
+  title: 'Status',
+  urlSegment: 'status'
+};
+
 exports.name = 'Status';
 exports.version = '1.0.0';
 exports.init = init;

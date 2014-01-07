@@ -12,6 +12,8 @@
   "globals": {
     "window": true,
     "angular": true,
-    "io": true
+    "io": true,
+    "$script": true,
+    "app": true
   }
 }
